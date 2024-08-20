@@ -1,16 +1,19 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { RecipeForm } from '../components/RecipeForm';
+import { Layout } from '../components/Layout';
 
 export function RecipeEdit() {
+    const navigate = useNavigate();
     const { id } = useParams();
 
     const handleSave = () => {
-        // Redirect to home or show success message after saving
+        navigate(`/recipe/${id}`)
+
     };
 
     return (
-        <div>
+        <Layout>
             <RecipeForm recipeId={id} onSave={handleSave} />
-        </div>
+        </Layout>
     );
 }

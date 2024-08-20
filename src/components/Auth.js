@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { loginUser, registerUser } from "../services/api";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await loginUser({ email, password });
-        if (response) {
-            onLogin(response.token); // Handle the authentication token
+        if (response.token) {
+            localStorage.setItem('authToken', response.token); // Store token in localStorage
+            navigate("/");
+            onLogin?.(response.token); // Optionally pass the token to the parent component
+        } else {
+            // Handle login error
         }
     };
 
@@ -37,7 +43,12 @@ export function Login({ onLogin }) {
                 >
                     Login
                 </button>
+                <div className="flex gap-2 mt-4">
+                    <p>Don't have an account?</p>
+                    <Link to='/signup' className="text-blue-500 underline">Make one</Link>
+                </div>
             </form>
+
         </div>
     );
 }
@@ -87,6 +98,10 @@ export function Signup({ onSignup }) {
                 >
                     Sign Up
                 </button>
+                <div className="flex gap-2 mt-4">
+                    <p>Already have an account?</p>
+                    <Link to='/login' className="text-blue-500 underline">Log in</Link>
+                </div>
             </form>
         </div>
     );
